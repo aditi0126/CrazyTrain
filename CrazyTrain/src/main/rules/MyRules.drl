@@ -1,0 +1,94 @@
+#created on: Feb 16, 2013
+#author Aditi Srinivas
+package Rule
+
+import com.sample.Computer;
+
+rule "Validate if System is loud"
+	no-loop true
+	salience 8
+	lock-on-active true
+	when
+		c : Computer( ( ( graphicsCardType=='a' || graphicsCardType=='p')  && cpu > 3) || (memory > 16) )
+	then 
+		System.out.println(c.getModel()+": loud");
+		
+		
+end
+
+rule "Validate if System is cheap"
+	no-loop true
+	salience 10
+	lock-on-active true
+	dialect "mvel"
+	when
+		c : Computer( price<1000)
+	then  
+		c.setCheap(true);
+		update(c);
+		System.out.println(c.getModel()+": cheap");
+		
+end
+
+
+rule "Validate if machine is hot"
+	no-loop true
+	salience 9
+	lock-on-active true
+	when
+		c : Computer( memory >8 || cpu>4 )
+	then 
+		c.setHot(true);
+		update(c);
+		System.out.println(c.getModel()+": hot");
+		
+end
+
+rule "Validate if machine is Expensive"
+no-loop true
+salience 7
+lock-on-active true
+	#include attributes such as "salience" here...
+	when
+		c : Computer( price>4000)
+	then 
+		System.out.println(c.getModel()+": expensive");
+		
+end
+
+
+rule "Validate if machine can Crunch Numbers"
+	no-loop true
+	salience 6
+	lock-on-active true
+	when
+		c : Computer( graphicsCardType =='p' || (memory>4 && cpu>4))
+	then 
+		System.out.println(c.getModel()+": number cruncher");
+		
+end
+
+rule "Validate if machine can Game"
+no-loop true
+salience 5
+lock-on-active true
+	when
+		c : Computer( graphicsCardType =='p' || ( cpu > 2 && graphicsCardType== 'a' ) )
+	then 
+		System.out.println(c.getModel()+"  Can game");
+		
+end
+
+rule "Is machine risky?"
+	no-loop true
+	salience 8
+	lock-on-active true
+	when
+		c : Computer( memory>=1 )
+		
+	then 
+		
+		System.out.println(c.getModel()+": "+drools.getRule().getName());
+		System.out.println(c.isHot() && c.isCheap());
+		
+end
